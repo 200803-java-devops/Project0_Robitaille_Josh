@@ -18,7 +18,7 @@ public class Client {
     Socket socket;
     InetAddress ip;
     int port;
-    String username;
+    static String username;
     static BufferedReader reader;
     static PrintWriter writer;
 
@@ -30,15 +30,19 @@ public class Client {
         } catch (UnknownHostException e) {
             System.err.println("Client could not get host name");
         }
+        setJFrameProperties();
+    }
 
+    public void setJFrameProperties() {
         chatWindow.setLayout(new FlowLayout());
         chatWindow.add(nameLabel);
+        chatWindow.setTitle("Chat Application");
         chatWindow.add(new JScrollPane(chatArea));
         chatWindow.add(label);
         chatWindow.add(textField);
         chatWindow.add(sendButton);
         chatWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        chatWindow.setSize(550, 625);
+        chatWindow.setSize(500, 625);
         chatWindow.setVisible(true);
 
         textField.setEditable(false);
@@ -48,11 +52,19 @@ public class Client {
         textField.addActionListener(new Listener());
     }
 
-    public void startClient() {
+    public void startSocket() {
         try {
             socket = new Socket(ip, port);
             System.out.println("Client started");
+        } catch (IOException e) {
+            System.err.println("Could not create socket for client on port " + port);
+        }
+    }
 
+    public void startClient() {
+        try {
+            startSocket();
+            
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
@@ -73,13 +85,14 @@ public class Client {
                     tokens[0] = tokenizer.nextToken();
                     tokens[1] = tokenizer.nextToken();
                     nameLabel.setText(tokens[1]);
-                } else{
+                    username = tokens[1];
+                } else {
                     chatArea.append(message + "\n");
                 }
             }
 
         } catch (IOException e) {
-            System.err.println("Client could not connect to port " + port);
+            System.err.println("Something went wrong reading messages ");
         }
 
     }
