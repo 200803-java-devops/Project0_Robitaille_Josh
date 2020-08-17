@@ -8,6 +8,5 @@ public class Listener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Client.writer.println(Client.textField.getText());
         Client.textField.setText("");
-
     }
 }

@@ -14,7 +14,7 @@ public class ChatHandler implements Runnable {
         this.socket = socket;
     }
 
-    public void setUserThread(Thread thread){
+    public void setUserThread(Thread thread) {
         this.userThread = thread;
     }
 
@@ -24,16 +24,16 @@ public class ChatHandler implements Runnable {
             dataOut = new PrintWriter(socket.getOutputStream(), true);
 
             boolean usernameTaken = false;
-            
-            while(true){
-                if (usernameTaken){
+
+            while (true) {
+                if (usernameTaken) {
                     dataOut.println("NameTaken");
-                } else{
+                } else {
                     dataOut.println("NameRequired");
                 }
                 username = dataIn.readLine();
 
-                if(!Server.users.containsValue(username)){
+                if (!Server.users.containsValue(username)) {
                     Server.users.put(userThread, username);
                     break;
                 } else {
@@ -43,10 +43,10 @@ public class ChatHandler implements Runnable {
             dataOut.println("NameAccepted:" + username);
             Server.writers.add(dataOut);
 
-            while(true){
+            while (true) {
 
                 String message = dataIn.readLine();
-                if (message == null){
+                if (message == null) {
                     return;
                 }
 

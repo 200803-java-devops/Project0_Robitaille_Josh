@@ -64,7 +64,7 @@ public class Client {
     public void startClient() {
         try {
             startSocket();
-            
+
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
