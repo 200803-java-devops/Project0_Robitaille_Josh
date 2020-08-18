@@ -2,20 +2,21 @@
 Social messaging app
 
 ## processes
-- [ ] handle text inputs and outputs from users
-	- [] user send message to everyone
-	- [] user send direct message to another user
+- [x] handle text inputs and outputs from users
+	- [x] user send message to everyone
+	- [x] user send direct message to another user
+- [] users can see who else is on the server
+	- [] command prompt set to check who is on the server
+
+## future goals
 - [] handle login and logoff
 	- [] user creates a username and password
 	- [] user logs off to leave chat
 	- [] wrong login and the user will need to try again
-- [] users can see who else is on the server
-	- [] command prompt set to check who is on the server
 
 ## database
 - [] store users
 	- [] stores the usernames
-	- [] stores the passwords of users (if passwords are implemented)
 - [] store chat history
 	- [] keeps track of a limited amount of chat history
 	

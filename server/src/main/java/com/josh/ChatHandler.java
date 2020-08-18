@@ -10,12 +10,17 @@ public class ChatHandler implements Runnable {
     BufferedReader dataIn;
     PrintWriter dataOut;
     String username;
-    Thread userThread;
 
     FileWriter fw;
     BufferedWriter bw;
     PrintWriter pw;
 
+    /**
+     * Constructor 
+     * Creates a filewriter, bufferedwriter, and printwriter to add chat history to a csv file
+     * @param socket
+     * @author Josh Robitaille
+     */
     public ChatHandler(Socket socket) {
         this.socket = socket;
 
@@ -28,10 +33,13 @@ public class ChatHandler implements Runnable {
         }
     }
 
-    public void setUserThread(Thread thread) {
-        this.userThread = thread;
-    }
-
+    /**
+     * Checks for a username, sends out a string to the client depending on the username input
+     * Checks if the username is taken already
+     * Then looks for messages from the user and sends it out to other users or a single user if dm'ed
+     * @author Josh Robitaille
+     */
+    @Override
     public void run() {
         try {
             dataIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -71,7 +79,7 @@ public class ChatHandler implements Runnable {
 
                     for (HashMap.Entry<String, PrintWriter> map : Server.users.entrySet()) {
                         if (map.getKey().equals(receiver)) {
-                            map.getValue().println(username + ": " + message);
+                            map.getValue().println("@" + username + ": " + msg);
                         } else {
                             continue;
                         }
@@ -83,7 +91,9 @@ public class ChatHandler implements Runnable {
                     }
                 }
                 pw.println(username + ": " + message);
-
+                System.out.println("Starting db thread");
+                Thread addData = new Thread(new DataAccess(username, message));
+                addData.start();
             }
 
         } catch (Exception e) {

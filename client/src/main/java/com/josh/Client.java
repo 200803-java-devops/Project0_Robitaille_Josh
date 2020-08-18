@@ -22,6 +22,13 @@ public class Client {
     static BufferedReader reader;
     static PrintWriter writer;
 
+    /**
+     * Constructor
+     * Runtime runs if the client is shutdown with Crl C or the like and shuts down the client correctly 
+     * Runs the setJFrameProperties() method
+     * @param port
+     * @author Josh Robitaille
+     */
     public Client(int port) {
         try {
             this.ip = InetAddress.getByName("localhost");
@@ -30,7 +37,7 @@ public class Client {
             Thread shutdownThread = new Thread(new Runnable(){
                 @Override
                 public void run() {
-                    System.err.println("Shutting down server");
+                    System.err.println("Shutting down client");
                     shutdownClient();
                 }                    
             });
@@ -43,6 +50,13 @@ public class Client {
         setJFrameProperties();
     }
 
+    /**
+     * Sets up all the properties to create the chat windows
+     * Creates 2 listners: 
+     * 1) for hitting the send button in the chat window and 
+     * 2) for hitting enter on the keyboard
+     * @author Josh Robitaille
+     */
     public void setJFrameProperties() {
         chatWindow.setLayout(new FlowLayout());
         chatWindow.add(nameLabel);
@@ -62,6 +76,10 @@ public class Client {
         textField.addActionListener(new Listener());
     }
 
+    /**
+     * Method used to start the client socket
+     * @author Josh Robitaille
+     */
     public void startSocket() {
         try {
             socket = new Socket(ip, port);
@@ -71,6 +89,13 @@ public class Client {
         }
     }
 
+    /**
+     * First runs the startSocket() method
+     * Creates the reader and writer for the client
+     * Checks about the username through the server
+     * If the message was not about the username then it accepts a message sent from the server
+     * @author Josh Robitaille
+     */
     public void startClient() {
         try {
             startSocket();
@@ -107,6 +132,10 @@ public class Client {
 
     }
 
+    /**
+     * Method used to close all the resources used in the client class
+     * @author Josh Robitaille
+     */
     public void shutdownClient() {
         try{
         socket.close();

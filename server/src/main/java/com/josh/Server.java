@@ -4,20 +4,22 @@ import java.net.*;
 import java.sql.Connection;
 import java.io.*;
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Server {
     static ServerSocket serverSocket;
     Socket clientSocket;
-    static ExecutorService threadpool;
     Connection connection;
     static HashMap<String, PrintWriter> users = new HashMap<String, PrintWriter>();
 
+    /**
+     * Constructor
+     * Runtime runs if the server is shutdown with Crl C or the like and shuts down the server correctly
+     * @param port
+     * @author Josh Robitaille
+     */
     public Server(int port) {
         try {
             serverSocket = new ServerSocket(port);
-            threadpool = Executors.newFixedThreadPool(15);
 
             Thread shutdownThread = new Thread(new Runnable(){
                 @Override
@@ -34,6 +36,12 @@ public class Server {
         }
     }
 
+    /**
+     * Method that is called in ServerApp 
+     * Listens for connections to clients through port 9008
+     * When accepted it starts a new Clienthandler
+     * @author Josh Robitaille
+     */
     public void startServer() {
         try {
             System.out.println("Waiting for connections . . .");
@@ -52,7 +60,6 @@ public class Server {
     public void shutdownServer() {
         try {
             serverSocket.close();
-            threadpool.shutdown();
 
         } catch (IOException e) {
             System.err.println("Could not shut down server");
