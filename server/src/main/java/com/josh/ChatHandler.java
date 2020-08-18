@@ -1,6 +1,8 @@
 package com.josh;
 
 import java.net.*;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 import java.io.*;
 
 public class ChatHandler implements Runnable {
@@ -10,8 +12,20 @@ public class ChatHandler implements Runnable {
     String username;
     Thread userThread;
 
+    FileWriter fw;
+    BufferedWriter bw;
+    PrintWriter pw;
+
     public ChatHandler(Socket socket) {
         this.socket = socket;
+
+        try {
+            fw = new FileWriter("C:/Users/joshr/vs_code_workspace/chatapp/LogTest.csv", true);
+            bw = new BufferedWriter(fw);
+            pw = new PrintWriter(bw, true);
+        } catch (IOException e) {
+            System.err.println("Could not set up logging writers");
+        }
     }
 
     public void setUserThread(Thread thread) {
@@ -33,15 +47,14 @@ public class ChatHandler implements Runnable {
                 }
                 username = dataIn.readLine();
 
-                if (!Server.users.containsValue(username)) {
-                    Server.users.put(userThread, username);
+                if (!Server.users.containsKey(username)) {
+                    Server.users.put(username, dataOut);
                     break;
                 } else {
                     usernameTaken = true;
                 }
             }
             dataOut.println("NameAccepted:" + username);
-            Server.writers.add(dataOut);
 
             while (true) {
 
@@ -50,9 +63,27 @@ public class ChatHandler implements Runnable {
                     return;
                 }
 
-                for (PrintWriter writer : Server.writers) {
-                    writer.println(username + ": " + message);
+                if (message.contains("@")) {
+                    String msg, receiver;
+                    StringTokenizer messageTokens = new StringTokenizer(message, "@");
+                    msg = messageTokens.nextToken();
+                    receiver = messageTokens.nextToken();
+
+                    for (HashMap.Entry<String, PrintWriter> map : Server.users.entrySet()) {
+                        if (map.getKey().equals(receiver)) {
+                            map.getValue().println(username + ": " + message);
+                        } else {
+                            continue;
+                        }
+                    }
+
+                } else {
+                    for (HashMap.Entry<String, PrintWriter> map : Server.users.entrySet()) {
+                        map.getValue().println(username + ": " + message);
+                    }
                 }
+                pw.println(username + ": " + message);
+
             }
 
         } catch (Exception e) {

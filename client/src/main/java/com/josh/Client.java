@@ -27,6 +27,16 @@ public class Client {
             this.ip = InetAddress.getByName("localhost");
             this.port = port;
 
+            Thread shutdownThread = new Thread(new Runnable(){
+                @Override
+                public void run() {
+                    System.err.println("Shutting down server");
+                    shutdownClient();
+                }                    
+            });
+
+            Runtime.getRuntime().addShutdownHook(new Thread(shutdownThread));
+
         } catch (UnknownHostException e) {
             System.err.println("Client could not get host name");
         }
@@ -95,6 +105,17 @@ public class Client {
             System.err.println("Something went wrong reading messages ");
         }
 
+    }
+
+    public void shutdownClient() {
+        try{
+        socket.close();
+        writer.close();
+        reader.close();
+        
+        } catch (IOException e) {
+            System.err.println("Could not shut down client");
+        }
     }
 
 }
