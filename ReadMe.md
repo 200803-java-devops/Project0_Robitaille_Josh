@@ -29,7 +29,7 @@ Social messaging app
 	- lets the player create a username
 - [] --users / --usrs
 	- check users on the application
-- [] --dm (username) / @(username)
+- []  @(username)
 	- direct message a user
 - [] --help / --h / --?
 	- gives the user the command options

@@ -91,7 +91,7 @@ public class ChatHandler implements Runnable {
                     }
                 }
                 pw.println(username + ": " + message);
-                System.out.println("Starting db thread");
+                // System.out.println("Starting db thread");
                 Thread addData = new Thread(new DataAccess(username, message));
                 addData.start();
             }
