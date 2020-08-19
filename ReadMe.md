@@ -17,8 +17,8 @@ Social messaging app
 ## database
 - [] store users
 	- [] stores the usernames
-- [] store chat history
-	- [] keeps track of a limited amount of chat history
+- [x] store chat history
+	- [x] keeps track of chat history
 	
 ## commands
 - [] --quit / --logoff

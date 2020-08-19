@@ -3,38 +3,42 @@ package com.josh;
 import java.sql.*;
 
 public class DataAccess implements Runnable {
-    static String url = "jdbc:postgresql://127.0.0.1:63099///chatdata";
-    static String postgresUser = "postgres";
-    static String password = "josh_database";
-
     String user, dialog;
 
     /**
      * Constructor
+     * 
      * @param user
      * @param dialog
      * @author Josh Robitaille
      */
-    public DataAccess(String user, String dialog){
+    public DataAccess(String user, String dialog) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Could not find driver with Class.forName()");
+        }
         this.user = user;
         this.dialog = dialog;
     }
 
     /**
-     * Start a connection to chatdata database
-     * Runs sql query to insert data into the database
+     * Start a connection to chatdata database Runs sql query to insert data into
+     * the database
+     * 
      * @author Josh Robitaille
      */
-    public  void run() {
-        try (Connection connection = DriverManager.getConnection(url, postgresUser, password);) {
+    public void run() {
+        System.out.println("trying connection for db");
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/chatdata",
+                "postgres", "josh_database")) {
             System.out.println("Starting prepared statement");
-            PreparedStatement ps = connection.prepareStatement("insert into chatdataTable(username, dialog) values(? , ?)");
+            PreparedStatement ps = connection.prepareStatement("insert into chatHistory values(? , ?)");
             System.out.println("adding values");
             ps.setString(1, user);
             ps.setString(2, dialog);
             System.out.println("executing query");
-            ps.executeQuery();
-            int rowsAffected = ps.executeUpdate();
+            ps.executeUpdate();
             System.out.println("Closing db connection");
             connection.close();
         } catch (Exception e) {

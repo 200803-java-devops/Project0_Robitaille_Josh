@@ -25,7 +25,7 @@ public class ChatHandler implements Runnable {
         this.socket = socket;
 
         try {
-            fw = new FileWriter("C:/Users/joshr/vs_code_workspace/chatapp/LogTest.csv", true);
+            fw = new FileWriter("C:/Users/joshr/vs_code_workspace/chatapp/ChatLog.csv", true);
             bw = new BufferedWriter(fw);
             pw = new PrintWriter(bw, true);
         } catch (IOException e) {

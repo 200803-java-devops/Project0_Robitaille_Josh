@@ -2,8 +2,7 @@ package com.josh;
 
 public class ServerApp {
     /**
-     * Main method for the Server side of the program
-     * Creates a new server on port 9008
+     * Main method for the Server side of the program Creates a new server on port 9008S
      * Runs the startServer() method in the server class
      * 
      * RUN THIS BEFORE YOU RUN A CLIENT
